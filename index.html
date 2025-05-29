@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Support SupaBreynan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Bungee', cursive, sans-serif;
+      background: url('https://tr.rbxcdn.com/180DAY-4702686e63c4397ec7c0c50823fd8067/500/280/Image/Jpeg/noFilter') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 10vh auto;
+      padding: 30px 25px;
+      background: rgba(0, 0, 0, 0.85);
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 30px #f1c40f80;
+      animation: fadeIn 1.2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      background: url('https://tr.rbxcdn.com/30DAY-AvatarHeadshot-16FF6829E35D46990267D3EED9F4E72A-Png/150/150/AvatarHeadshot/Webp/noFilter') center/cover no-repeat;
+      border: 5px solid #ffd700;
+      border-radius: 50%;
+      box-shadow: 0 0 12px #f39c12;
+    }
+
+    h1 {
+      color: #ffdd59;
+      font-size: 2.4rem;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px #f39c12;
+    }
+
+    p {
+      color: #ddd;
+      font-size: 1rem;
+      margin-bottom: 30px;
+      line-height: 1.5;
+      text-shadow: 0 0 6px #000;
+    }
+
+    .donate-button {
+      display: inline-block;
+      padding: 15px 35px;
+      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      border: none;
+      border-radius: 40px;
+      font-size: 1.3rem;
+      color: white;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 0 20px #ff416c;
+      transition: all 0.3s ease;
+    }
+
+    .donate-button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(45deg, #ff4b2b, #ff416c);
+      box-shadow: 0 0 25px #ff6b6b;
+    }
+
+    .audio-player {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 10px;
+      padding: 5px;
+      box-shadow: 0 0 25px #ff4757a0;
+      z-index: 10;
+    }
+
+    #visitor-count {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: #ffdd59;
+      text-shadow: 0 0 8px #000;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        margin: 8vh 20px;
+        padding: 25px 20px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .donate-button {
+        font-size: 1.1rem;
+        padding: 12px 28px;
+      }
+
+      .avatar {
+        width: 90px;
+        height: 90px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="overlay"></div>
+
+  <main class="container" role="main">
+    <div class="avatar" aria-label="SupaBreynan Roblox Avatar"></div>
+    <h1>Support SupaBreynan!</h1>
+    <p>Click below to donate Robux and help me grow. Every bit helps!</p>
+    <a class="donate-button" href="https://www.roblox.com/games/3195056186/DONATE#!/store" target="_blank" onclick="startConfetti(); playSound()">🎮 Donate Robux</a>
+    <p id="visitor-count">Visitors: Loading...</p>
+  </main>
+
+  <div class="audio-player">
+    <audio controls autoplay loop>
+      <source src="https://cdn.pixabay.com/download/audio/2021/10/10/audio_0bdf71c505.mp3?filename=electronic-chill-out-background-music-11002.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+
+  <!-- Sound for button click -->
+  <audio id="confetti-sound" src="https://cdn.pixabay.com/download/audio/2022/03/23/audio_d845a29c02.mp3?filename=click-button-124467.mp3" preload="auto"></audio>
+
+  <script>
+    function startConfetti() {
+      confetti({
+        particleCount: 180,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+
+    function playSound() {
+      const sound = document.getElementById('confetti-sound');
+      sound.currentTime = 0;
+      sound.play();
+    }
+
+    // Visitor Counter using CountAPI
+    const counterElement = document.getElementById("visitor-count");
+    const namespace = "supabreynan_site";
+    const key = "visits";
+
+    fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+      .then(res => res.json())
+      .then(data => {
+        counterElement.textContent = `Visitors: ${data.value}`;
+      })
+      .catch(() => {
+        counterElement.textContent = "Visitors: unavailable";
+      });
+  </script>
+</body>
+</html>
