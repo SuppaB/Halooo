@@ -151,26 +151,28 @@
   <!-- Sound for button click -->
   <audio id="confetti-sound" src="https://cdn.pixabay.com/download/audio/2022/03/23/audio_d845a29c02.mp3?filename=click-button-124467.mp3" preload="auto"></audio>
 
-  <script>
-    function startConfetti() {
-      confetti({
-        particleCount: 180,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-    }
+ <script>
+  function startConfetti() {
+    confetti({
+      particleCount: 180,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  }
 
-    function playSound() {
-      const sound = document.getElementById('confetti-sound');
-      sound.currentTime = 0;
-      sound.play();
-    }
+  function playSound() {
+    const sound = document.getElementById('confetti-sound');
+    sound.currentTime = 0;
+    sound.play();
+  }
 
-    // Visitor Counter using CountAPI
-    const counterElement = document.getElementById("visitor-count");
-    const namespace = "supabreynan_site";
-    const key = "visits";
+  // Visitor Counter using CountAPI
+  const counterElement = document.getElementById("visitor-count");
+  const namespace = "supabreynan_site";
+  const key = "visits";
 
+  // Function to increment counter
+  function incrementVisitorCount() {
     fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
       .then(res => res.json())
       .then(data => {
@@ -179,6 +181,24 @@
       .catch(() => {
         counterElement.textContent = "Visitors: unavailable";
       });
-  </script>
-</body>
-</html>
+  }
+
+  // First, try incrementing; if it fails, create the counter
+  fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+    .then(response => {
+      if (!response.ok) {
+        // Counter doesn't exist — create it
+        return fetch(`https://api.countapi.xyz/create?namespace=${namespace}&key=${key}&value=0`)
+          .then(() => fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`));
+      }
+      return response;
+    })
+    .then(res => res.json())
+    .then(data => {
+      counterElement.textContent = `Visitors: ${data.value}`;
+    })
+    .catch(() => {
+      counterElement.textContent = "Visitors: unavailable";
+    });
+</script>
+
